@@ -4,18 +4,16 @@ class UIHandler:
     @staticmethod
     def show_input_dialog(title: str, description: str, max_length: int = 32) -> str:
         """
-        Zeigt ein Eingabefeld in einem Pop-Up an und gibt die Eingabe zurück.
+        Zeigt ein Eingabefeld an und gibt die Eingabe zurück.
         """
-        with st.form(key=f"form_{title}"):
-            st.subheader(title)
-            st.write(description)
-            user_input = st.text_input("Eingabe:", max_chars=max_length)
-            submitted = st.form_submit_button("Bestätigen")
-            if submitted:
-                if len(user_input.strip()) == 0:
-                    st.error("Die Eingabe darf nicht leer sein.")
-                else:
-                    return user_input.strip()
+        st.subheader(title)
+        st.write(description)
+        user_input = st.text_input("Eingabe:", max_chars=max_length, key=f"input_{title}")
+        if st.button("Bestätigen", key=f"submit_{title}"):
+            if len(user_input.strip()) == 0:
+                st.error("Die Eingabe darf nicht leer sein.")
+            else:
+                return user_input.strip()
         return None
 
     @staticmethod

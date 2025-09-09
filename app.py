@@ -59,19 +59,24 @@ def delete_user(folder_name, user_name):
             UIHandler.show_success(f"Nutzer '{user_name}' wurde gelöscht.")
 
 # Sidebar
-st.sidebar.title("Ordner und Nutzer")
+st.sidebar.title("📂 Ordner und Nutzer")
 for folder in st.session_state.folders:
-    with st.sidebar.expander(folder.name):
+    with st.sidebar.expander(f"📁 {folder.name}"):
         for user in folder.users:
-            st.write(f"- {user.name} ", unsafe_allow_html=True)
-            if st.button("Löschen", key=f"delete_user_{folder.name}_{user.name}"):
-                delete_user(folder.name, user.name)
+            # Nutzer mit Icon und Löschen-Button anzeigen
+            col1, col2 = st.sidebar.columns([4, 1])
+            with col1:
+                st.markdown(f"👤 {user.name}")
+            with col2:
+                if st.button("❌", key=f"delete_user_{folder.name}_{user.name}"):
+                    delete_user(folder.name, user.name)
 
-        if st.button("Löschen", key=f"delete_folder_{folder.name}"):
+        # Ordner-Löschen-Button
+        if st.button("Ordner löschen", key=f"delete_folder_{folder.name}"):
             delete_folder(folder.name)
 
 # Ordner erstellen
-if st.sidebar.button("Neuen Ordner erstellen"):
+if st.sidebar.button("📂 Neuen Ordner erstellen"):
     create_folder()
 
 # Hauptbereich
@@ -85,5 +90,5 @@ if selected_folder != "Kein Ordner":
     st.session_state.selected_folder = selected_folder
 
 # Nutzer erstellen
-if st.sidebar.button("Neuen Nutzer erstellen"):
+if st.sidebar.button("👤 Neuen Nutzer erstellen"):
     create_user()
